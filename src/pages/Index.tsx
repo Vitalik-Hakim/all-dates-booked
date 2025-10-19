@@ -3,12 +3,14 @@ import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ErrorDialog } from "@/components/ErrorDialog";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { generateUsername, generateMessage } from "@/utils/usernameGenerator";
 import { CalendarIcon } from "lucide-react";
 
 const Index = () => {
   const [date, setDate] = useState<Date>();
   const [showError, setShowError] = useState(false);
+  const [showWaitlist, setShowWaitlist] = useState(false);
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [attemptCount, setAttemptCount] = useState(0);
@@ -98,6 +100,22 @@ const Index = () => {
         username={username}
         message={message}
         attemptCount={attemptCount}
+        onWaitlistClick={() => setShowWaitlist(true)}
+      />
+
+      <WaitlistDialog
+        open={showWaitlist}
+        onOpenChange={setShowWaitlist}
+        onComplete={() => {
+          // After waitlist failure, trigger another error
+          setTimeout(() => {
+            const newUsername = generateUsername(attemptCount);
+            const newMessage = generateMessage(attemptCount);
+            setUsername(newUsername);
+            setMessage(newMessage);
+            setShowError(true);
+          }, 300);
+        }}
       />
     </div>
   );

@@ -8,9 +8,10 @@ interface ErrorDialogProps {
   username: string;
   message: string;
   attemptCount: number;
+  onWaitlistClick: () => void;
 }
 
-export const ErrorDialog = ({ open, onOpenChange, username, message, attemptCount }: ErrorDialogProps) => {
+export const ErrorDialog = ({ open, onOpenChange, username, message, attemptCount, onWaitlistClick }: ErrorDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md bg-card shadow-card border-border animate-shake">
@@ -32,7 +33,7 @@ export const ErrorDialog = ({ open, onOpenChange, username, message, attemptCoun
               className="w-full"
               onClick={() => {
                 onOpenChange(false);
-                setTimeout(() => onOpenChange(true), 500);
+                onWaitlistClick();
               }}
             >
               Join Waitlist for This Date
