@@ -1,12 +1,104 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ErrorDialog } from "@/components/ErrorDialog";
+import { generateUsername, generateMessage } from "@/utils/usernameGenerator";
+import { CalendarIcon } from "lucide-react";
 
 const Index = () => {
+  const [date, setDate] = useState<Date>();
+  const [showError, setShowError] = useState(false);
+  const [username, setUsername] = useState("");
+  const [message, setMessage] = useState("");
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleConfirm = () => {
+    if (!date) return;
+    
+    const newAttempt = attemptCount + 1;
+    setAttemptCount(newAttempt);
+    
+    // Simulate loading for next month button chaos
+    if (newAttempt >= 7) {
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+        const newUsername = generateUsername(newAttempt);
+        const newMessage = generateMessage(newAttempt);
+        setUsername(newUsername);
+        setMessage(newMessage);
+        setShowError(true);
+      }, 2000);
+    } else {
+      const newUsername = generateUsername(newAttempt);
+      const newMessage = generateMessage(newAttempt);
+      setUsername(newUsername);
+      setMessage(newMessage);
+      setShowError(true);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <Card className="w-full max-w-md shadow-elegant border-border">
+        <CardHeader className="text-center space-y-2">
+          <div className="flex justify-center mb-2">
+            <div className="rounded-full bg-primary/10 p-3">
+              <CalendarIcon className="h-8 w-8 text-primary" />
+            </div>
+          </div>
+          <CardTitle className="text-3xl font-bold">Book Your Date</CardTitle>
+          <CardDescription className="text-base">
+            Select a date to schedule your appointment
+          </CardDescription>
+          {attemptCount >= 3 && (
+            <p className="text-xs text-muted-foreground italic">
+              💡 Tip: Try picking yesterday 😉
+            </p>
+          )}
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="flex justify-center">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              className="rounded-lg border shadow-sm"
+            />
+          </div>
+          
+          <Button 
+            className="w-full text-lg py-6 font-semibold"
+            onClick={handleConfirm}
+            disabled={!date || isLoading}
+          >
+            {isLoading ? (
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                Loading...
+              </div>
+            ) : (
+              "Continue"
+            )}
+          </Button>
+
+          {attemptCount > 0 && (
+            <p className="text-center text-sm text-muted-foreground">
+              Attempts: {attemptCount}
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
+      <ErrorDialog 
+        open={showError}
+        onOpenChange={setShowError}
+        username={username}
+        message={message}
+        attemptCount={attemptCount}
+      />
     </div>
   );
 };
