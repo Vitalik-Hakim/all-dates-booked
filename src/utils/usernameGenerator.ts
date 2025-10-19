@@ -30,6 +30,10 @@ const messages = [
   "Oh no… that date's booked by",
   "This date is reserved for",
   "Already taken by",
+  "Great choice! But unfortunately it's taken by",
+  "So close! This one just got claimed by",
+  "Almost! Try again — this one belongs to",
+  "Good news! This date exists. Bad news: it's owned by",
   "We're all out of dates. Time itself is fully reserved by",
   "The fabric of spacetime at this date belongs to",
   "This particular moment in history is owned by"

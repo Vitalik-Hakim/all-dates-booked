@@ -8,9 +8,23 @@ import { buttonVariants } from "@/components/ui/button";
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
+  const [month, setMonth] = React.useState<Date>(new Date());
+
+  const handleMonthChange = (direction: 'prev' | 'next') => {
+    // Generate random year between 1900 and 2100
+    const randomYear = Math.floor(Math.random() * 201) + 1900;
+    // Generate random month (0-11)
+    const randomMonth = Math.floor(Math.random() * 12);
+    // Create random date
+    const randomDate = new Date(randomYear, randomMonth, 1);
+    setMonth(randomDate);
+  };
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      month={month}
+      onMonthChange={setMonth}
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -42,8 +56,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ..._props }) => <ChevronLeft className="h-4 w-4" />,
-        IconRight: ({ ..._props }) => <ChevronRight className="h-4 w-4" />,
+        IconLeft: ({ ..._props }) => <ChevronLeft className="h-4 w-4" onClick={() => handleMonthChange('prev')} />,
+        IconRight: ({ ..._props }) => <ChevronRight className="h-4 w-4" onClick={() => handleMonthChange('next')} />,
       }}
       {...props}
     />
