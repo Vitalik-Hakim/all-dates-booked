@@ -147,9 +147,6 @@ export const WaitlistDialog = ({ open, onOpenChange, onComplete }: WaitlistDialo
                 Sorry, you're too late. The waitlist for this date is already full. 
                 Please try selecting another date.
               </p>
-              <p className="text-xs text-muted-foreground/70 italic pt-2">
-                (All dates are full too, by the way)
-              </p>
             </div>
 
             <Button 
